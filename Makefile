@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2010 Curtis McEnroe <programble@gmail.com>
 #
 # This file is part of BSH.
@@ -16,3 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with BSH.  If not, see <http://www.gnu.org/licenses/>.
 
+CC=clang
+INCLUDES=-Iinclude/
+CFLAGS=-std=c99 -Wall -Wextra $(INCLUDES)
+LDFLAGS=
+DFLAGS=-g -DDEBUG
+SOURCES=src/main.c
+OBJECTS=$(SOURCES:%.c=%.o)
+EXECUTABLE=bsh
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+debug:
+	@$(MAKE) $(MFLAGS) CFLAGS="$(CFLAGS) $(DFLAGS)"
+
+clean:
+	rm -f $(OBJECTS)
+	rm -f $(EXECUTABLE)
+
+distclean: clean
+	rm -f *~
+	rm -f src/*~
+	rm -f include/*~
+
+.PHONY: clean distclean debug
