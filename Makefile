@@ -17,11 +17,11 @@
 
 CC=clang
 INCLUDES=-Iinclude/
-CFLAGS=-std=c99 -Wall -Wextra $(INCLUDES)
+CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDES) -include config.h
 LDFLAGS=
-DFLAGS=-g -DDEBUG
-SOURCES=src/main.c
-OBJECTS=$(SOURCES:%.c=%.o)
+DFLAGS=-g -DDEBUG -O0
+SOURCES:=$(wildcard src/*.c)
+OBJECTS:=$(SOURCES:%.c=%.o)
 EXECUTABLE=bsh
 
 all: $(SOURCES) $(EXECUTABLE)
