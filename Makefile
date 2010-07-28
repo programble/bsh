@@ -44,4 +44,8 @@ distclean: clean
 	rm -f src/*~
 	rm -f include/*~
 
-.PHONY: clean distclean debug
+# Flymake
+check-syntax:
+	$(CC) $(CFLAGS) -fsyntax-only $(CHK_SOURCES)
+
+.PHONY: clean distclean debug check-syntax
