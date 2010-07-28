@@ -16,32 +16,21 @@
  *  along with BSH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/wait.h>
+#ifndef __COMMAND_H__
+#define __COMMAND_H__
 
-#include "command.h"
-
-int main(int argc, char *argv[])
+typedef struct argument_list_node
 {
-#ifdef DEBUG
-    argument_list *test = read_argument_list();
-    printf("%d\n", test->size);
-    argument_list_node *node = test->first;
-    for (int i = 0; i < test->size; i++)
-    {
-        printf("%s\n", node->data);
-        node = node->next;
-    }
-    char **test_array = argument_list_to_array(test);
-    int pid = fork();
-    if (pid == 0)
-        execvp(test_array[0], test_array);
-    else
-        waitpid(pid, NULL, 0);
-    printf("yo, im the parent, still running");
+    char *data;
+    struct argument_list_node *next;
+} argument_list_node;
+
+typedef struct argument_list
+{
+    argument_list_node *first;
+    int size;
+} argument_list;
+
+argument_list *read_argument_list();
+char **argument_list_to_array(argument_list*);
 #endif
-    return 0;
-}
