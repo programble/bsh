@@ -16,8 +16,8 @@
 # along with BSH.  If not, see <http://www.gnu.org/licenses/>.
 
 CC=clang
-INCLUDES=-Iinclude/
-CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDES) -include config.h
+INCLUDES=-Iinclude/ -include config.h
+CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDES)
 LDFLAGS=
 DFLAGS=-g -DDEBUG -O0
 SOURCES:=$(wildcard src/*.c)
