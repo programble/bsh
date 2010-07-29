@@ -27,6 +27,7 @@
 
 int main(int argc, char *argv[])
 {
+    setenv("SHELL", argv[0], true);
     while (true)
     {
         printf("%s ", (geteuid() == 0) ? "#" : "$");
