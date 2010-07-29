@@ -19,18 +19,10 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-typedef struct argument_list_node
-{
-    char *data;
-    struct argument_list_node *next;
-} argument_list_node;
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-typedef struct argument_list
-{
-    argument_list_node *first;
-    int size;
-} argument_list;
+int run_command(char**);
 
-argument_list *read_argument_list();
-char **argument_list_to_array(argument_list*);
 #endif

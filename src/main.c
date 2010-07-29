@@ -18,30 +18,21 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/wait.h>
 
+#include "common.h"
+#include "reader.h"
 #include "command.h"
 
 int main(int argc, char *argv[])
 {
-#ifdef DEBUG
-    argument_list *test = read_argument_list();
-    printf("%d\n", test->size);
-    argument_list_node *node = test->first;
-    for (int i = 0; i < test->size; i++)
+    while (true)
     {
-        printf("%s\n", node->data);
-        node = node->next;
+        printf("$ ");
+        char **command = read_command(stdin);
+        if (!command)
+            break;
+        int status = run_command(command);
+        printf("Process exited with status %d\n", status);
     }
-    char **test_array = argument_list_to_array(test);
-    int pid = fork();
-    if (pid == 0)
-        execvp(test_array[0], test_array);
-    else
-        waitpid(pid, NULL, 0);
-    printf("yo, im the parent, still running");
-#endif
     return 0;
 }
