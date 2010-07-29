@@ -17,7 +17,7 @@
 
 CC=clang
 INCLUDES=-Iinclude/ -include config.h
-CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDES)
+CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter -D_POSIX_C_SOURCE=200112L $(INCLUDES)
 LDFLAGS=
 DFLAGS=-g -DDEBUG -O0
 SOURCES:=$(wildcard src/*.c)

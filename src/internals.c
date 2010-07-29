@@ -20,9 +20,17 @@
 
 int cd(char **command)
 {
+    /* Save current directory */
+    char *oldwd = getcwd(NULL, 0);
     char *directory;
     if (command[1] == NULL)
         directory = getenv("HOME");
+    else if (strequ(command[1], "-"))
+    {
+        directory = getenv("OLDPWD");
+        if (!directory)
+            directory = command[1];
+    }
     else
         directory = command[1];
     if (chdir(directory) == -1)
@@ -31,7 +39,12 @@ int cd(char **command)
         return 1;
     }
     else
+    {
+        setenv("OLDPWD", oldwd, true);
+        free(oldwd);
+        setenv("PWD", directory, true);
         return 0;
+    }
 }
 
 int exit_(char **command)
