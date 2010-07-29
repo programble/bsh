@@ -25,4 +25,6 @@ typedef enum
     true
 } bool;
 
+#define strequ(a,b) (strcmp(a, b) == 0)
+
 #endif

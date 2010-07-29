@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#include "common.h"
 #include "internals.h"
 
 int run_command(char**);

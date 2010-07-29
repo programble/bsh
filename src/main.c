@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         char **command = read_command(stdin);
         if (!command)
             break;
-        if (strcmp(command[0], "") == 0)
+        if (strequ(command[0], ""))
             continue;
         run_command(command);
         free_command(command);

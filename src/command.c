@@ -20,9 +20,9 @@
 
 int run_internal(char **command)
 {
-    if (strcmp(command[0], "cd") == 0)
+    if (strequ(command[0], "cd"))
         return cd(command);
-    else if (strcmp(command[0], "exit") == 0)
+    else if (strequ(command[0], "exit"))
         return exit_(command);
     else
         return -1;
