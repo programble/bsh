@@ -28,12 +28,12 @@ int run_command(char **command)
         /* Run the command in the child */
         execvp(command[0], command);
         /* If execution reaches this point, the command is not found */
-        /* TODO: Print error based on errno */
+        perror(command[0]);
         exit(0);
     }
     else
     {
-        /* The processes exit code */
+        /* The process exit code */
         int status;
         /* Wait for the child to finish */
         waitpid(pid, &status, 0);
