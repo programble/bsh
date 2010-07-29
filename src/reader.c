@@ -34,6 +34,10 @@ char **read_command(FILE *stream)
             c = fgetc(stream);
             if (c == EOF)
                 return NULL;
+            if (c == ' ' && word_length == 0)
+                continue;
+            if (c == ';')
+                c = '\n';
             if (c == ' ')
             {
                 c = 0x0;
