@@ -16,18 +16,14 @@
  *  along with BSH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMAND_H__
-#define __COMMAND_H__
+#ifndef __INTERNALS_H__
+#define __INTERNALS_H__
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
 #include <unistd.h>
-#include <sys/wait.h>
+#include <errno.h>
 
-#include "internals.h"
-
-int run_command(char**);
+int cd(char**);
 
 #endif

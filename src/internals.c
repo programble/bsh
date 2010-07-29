@@ -16,18 +16,20 @@
  *  along with BSH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMAND_H__
-#define __COMMAND_H__
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
 #include "internals.h"
 
-int run_command(char**);
-
-#endif
+int cd(char **command)
+{
+    char *directory;
+    if (command[1] == NULL)
+        directory = getenv("HOME");
+    else
+        directory = command[1];
+    if (chdir(directory) == -1)
+    {
+        perror(directory);
+        return 1;
+    }
+    else
+        return 0;
+}

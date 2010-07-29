@@ -22,7 +22,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "common.h"
+
 char **read_command(FILE*);
 void free_command(char**);
+int count_arguments(char**);
 
 #endif

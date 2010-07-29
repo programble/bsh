@@ -29,7 +29,7 @@ char **read_command(FILE *stream)
         int word_length = 0;
         char *word = malloc(word_length);
         int c;
-        while (1)
+        while (true)
         {
             c = fgetc(stream);
             if (c == EOF)
@@ -64,4 +64,12 @@ void free_command(char **command)
     for (int i = 0; command[i] != NULL; i++)
         free(command[i]);
     free(command);
+}
+
+int count_arguments(char **command)
+{
+    int count = 0;
+    for (int i = 1; command[i] != NULL; i++)
+        count++;
+    return count;
 }

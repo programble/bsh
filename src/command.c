@@ -18,7 +18,17 @@
 
 #include "command.h"
 
-int run_command(char **command)
+int run_internal(char **command)
+{
+    if (strcmp(command[0], "cd") == 0)
+    {
+        return cd(command);
+    }
+    else
+        return -1;
+}
+
+int run_external(char **command)
 {
     /* Fork before running the command, since execvp replaces
        the current process */
@@ -46,4 +56,14 @@ int run_command(char **command)
         /* Return the process' exit status */
         return status;
     }
+}
+
+int run_command(char **command)
+{
+    /* First try running as an internal command, then external */
+    int status;
+    status = run_internal(command);
+    if (status == -1)
+        status = run_external(command);
+    return status;
 }
