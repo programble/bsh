@@ -25,5 +25,6 @@
 #include <errno.h>
 
 int cd(char**);
+int exit_(char**);
 
 #endif

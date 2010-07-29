@@ -21,9 +21,9 @@
 int run_internal(char **command)
 {
     if (strcmp(command[0], "cd") == 0)
-    {
         return cd(command);
-    }
+    else if (strcmp(command[0], "exit") == 0)
+        return exit_(command);
     else
         return -1;
 }

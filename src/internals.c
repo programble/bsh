@@ -33,3 +33,18 @@ int cd(char **command)
     else
         return 0;
 }
+
+int exit_(char **command)
+{
+    int status = 0;
+    if (command[1] != NULL)
+    {
+        int match = sscanf(command[1], "%d", &status);
+        if (match == 0)
+        {
+            printf("exit: numeric argument required\n");
+            return 1;
+        }
+    }
+    exit(status);
+}
