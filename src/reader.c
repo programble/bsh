@@ -18,48 +18,78 @@
 
 #include "reader.h"
 
+char *read_word(FILE *stream, int *more)
+{
+    *more = 1;
+    int length = 0;
+    char *word = malloc(length);
+    int quote_type = 0;
+    int c;
+    while (true)
+    {
+        /* Get a new character from the stream */
+        c = fgetc(stream);
+        /* Eof? */
+        if (c == EOF)
+        {
+            *more = EOF;
+            return NULL;
+        }
+        /* Skip leading whitespace */
+        if (c == ' ' && length == 0)
+            continue;
+        /* Quoting */
+        if (c == '"')
+        {
+            quote_type = 1;
+            continue;
+        }
+        else if (c == '\'')
+        {
+            quote_type = 2;
+            continue;
+        }
+        /* Outside of quotes, ; is treated as \n */
+        if (c == ';' && !quote_type)
+            c = '\n';
+        /* Outside of quotes, the word ends at a space */
+        if (c == ' ' && !quote_type)
+            c = 0;
+        /* Inside quotes, a word ends at the next quote */
+        else if (c == '"' && quote_type == 1)
+            c = 0;
+        else if (c == '\'' && quote_type == 1)
+            c = 0;
+        /* \n means there are no more words */
+        if (c == '\n')
+        {
+            *more = 0;
+            c = 0;
+        }
+        /* Add character to word */
+        word = realloc(word, ++length);
+        word[length-1] = c;
+        /* Break if the word is terminated */
+        if (c == 0)
+            break;
+    }
+    return word;
+}
+
 char **read_command(FILE *stream)
 {
-    int word_count = 0;
-    char **command = malloc(word_count);
-    do
+    int count = 0;
+    char **command = malloc(count);
+    int more = 1;
+    while (more == 1)
     {
-        word_count++;
-        command = realloc(command, word_count * sizeof(char*));
-        int word_length = 0;
-        char *word = malloc(word_length);
-        int c;
-        while (true)
-        {
-            c = fgetc(stream);
-            if (c == EOF)
-                return NULL;
-            if (c == ' ' && word_length == 0)
-                continue;
-            if (c == ';')
-                c = '\n';
-            if (c == ' ')
-            {
-                c = 0x0;
-            }
-            else if (c == '\n')
-            {
-                command = realloc(command, (word_count + 1) * sizeof(char*));
-                command[word_count] = NULL;
-            }
-            word_length++;
-            word = realloc(word, word_length);
-            if (c == '\n')
-                word[word_length-1] = 0x0;
-            else
-                word[word_length-1] = (char) c;
-            if (c == 0x0 || c == '\n')
-                break;
-        }
-        command[word_count-1] = word;
-        if (c == '\n')
-            word_count++;
-    } while (command[word_count-1] != NULL);
+        command = realloc(command, (++count) * sizeof(char*));
+        command[count-1] = read_word(stream, &more);
+        if (more == EOF)
+            return NULL;
+    }
+    command = realloc(command, (++count) * sizeof(char*));
+    command[count-1] = NULL;
     return command;
 }
 
