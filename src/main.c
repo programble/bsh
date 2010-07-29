@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "common.h"
 #include "reader.h"
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
 {
     while (true)
     {
-        printf("$ ");
+        printf("%s ", (geteuid() == 0) ? "#" : "$");
         char **command = read_command(stdin);
         if (!command)
             break;
