@@ -27,8 +27,9 @@ int run_command(char **command)
     {
         /* Run the command in the child */
         execvp(command[0], command);
-        /* If execution reaches this point, an error has occured
-           TODO: Handle errors */
+        /* If execution reaches this point, the command is not found */
+        /* TODO: Print error based on errno */
+        exit(0);
     }
     else
     {
@@ -39,5 +40,4 @@ int run_command(char **command)
         /* Return the process' exit status */
         return status;
     }
-    return -1;
 }

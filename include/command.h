@@ -20,6 +20,8 @@
 #define __COMMAND_H__
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <unistd.h>
 #include <sys/wait.h>
 
