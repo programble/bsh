@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "common.h"
 #include "reader.h"
@@ -31,8 +32,10 @@ int main(int argc, char *argv[])
         char **command = read_command(stdin);
         if (!command)
             break;
-        int status = run_command(command);
-        printf("Process exited with status %d\n", status);
+        if (strcmp(command[0], "") == 0)
+            continue;
+        run_command(command);
+        free_command(command);
     }
     return 0;
 }
