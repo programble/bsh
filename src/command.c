@@ -23,7 +23,13 @@ int run_command(char **command)
     /* Fork before running the command, since execvp replaces
        the current process */
     int pid = fork();
-    if (pid == 0)
+    if (pid == -1)
+    {
+        /* Could not fork */
+        perror("fork");
+        return 0;
+    }
+    else if (pid == 0)
     {
         /* Run the command in the child */
         execvp(command[0], command);
