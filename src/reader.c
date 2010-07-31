@@ -18,6 +18,45 @@
 
 #include "reader.h"
 
+char *read_variable_expansion(FILE *stream, int *more, bool *eow)
+{
+    *eow = false;
+    int length = 0;
+    char *var = malloc(length);
+    bool quote = false;
+    while (true)
+    {
+        char c = fgetc(stream);
+        /* "quote" */
+        if (c == '{' && length == 0)
+        {
+            quote = true;
+            continue;
+        }
+        if (c == ' ' && !quote)
+        {
+            c = 0;
+            *eow = true;
+        }
+        if (c == '\n')
+        {
+            c = 0;
+            *more = 0;
+            *eow = true;
+        }
+        if (c == '}' && quote)
+            c = 0;
+        var = realloc(var, ++length);
+        var[length-1] = c;
+        if (c == 0)
+            break;
+    }
+    /* get the variable */
+    char *value = getenv(var);
+    free(var);
+    return value;
+}
+
 char *read_word(FILE *stream, int *more)
 {
     *more = 1;
@@ -58,7 +97,7 @@ char *read_word(FILE *stream, int *more)
         /* Inside quotes, a word ends at the next quote */
         else if (c == '"' && quote_type == 1)
             c = 0;
-        else if (c == '\'' && quote_type == 1)
+        else if (c == '\'' && quote_type == 2)
             c = 0;
         /* \n means there are no more words */
         if (c == '\n')
@@ -66,9 +105,30 @@ char *read_word(FILE *stream, int *more)
             *more = 0;
             c = 0;
         }
+        /* Variable expansion */
+        if (c == '$' && quote_type != 2)
+        {
+            bool eow = false;
+            char *var = read_variable_expansion(stream, more, &eow);
+            if (var == NULL)
+            {
+                if (*more && !(eow && !quote_type))
+                    continue;
+                else
+                    break;
+            }
+            int ip = length;
+            length += strlen(var);
+            word = realloc(word, length);
+            strcpy(word + ip, var);
+            if (*more && !(eow && !quote_type))
+                continue;
+            else
+                break;
+        }
         /* Add character to word */
         word = realloc(word, ++length);
-        word[length-1] = c;
+        word[length-1] = (char) c;
         /* Break if the word is terminated */
         if (c == 0)
             break;
