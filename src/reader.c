@@ -110,21 +110,13 @@ char *read_word(FILE *stream, int *more)
         {
             bool eow = false;
             char *var = read_variable_expansion(stream, more, &eow);
-            if (var == NULL)
+            if (var != NULL)
             {
-                if (*more && !(eow && !quote_type))
-                    continue;
-                else
-                    break;
+                int ip = length;
+                length += strlen(var);
+                word = realloc(word, length);
+                strcpy(word + ip, var);
             }
-            int ip = length;
-            length += strlen(var);
-            word = realloc(word, length);
-            strcpy(word + ip, var);
-            if (*more && !(eow && !quote_type))
-                continue;
-            else
-                break;
         }
         /* Add character to word */
         word = realloc(word, ++length);
